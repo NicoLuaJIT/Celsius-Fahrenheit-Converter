@@ -67,7 +67,7 @@ class Program : public QWidget
                 }
 
                 double result = (celsius * 9.0/5.0) + 32.0;
-                setLabelText(QString("Result: %1 °F").arg(result, 0, 'c', 2));
+                setLabelText(QString("Result: %1 °F").arg(result, 0, 'f', 2));
             });
         }
     
