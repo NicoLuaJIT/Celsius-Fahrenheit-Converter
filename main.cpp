@@ -32,7 +32,7 @@ class Program : public QWidget
         resultLabel->setText(QString(str));
     }
     public:
-        Program(QWidget *parent = nullptr) noexcept : QWidget(std::move(parent)) // Note for John: Clean implementation, but why is std::move here? -- Nico
+        Program(QWidget *parent = nullptr) noexcept : QWidget(parent)
         {
             // Add Widgets to layout
             layout->addWidget(title);
