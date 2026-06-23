@@ -30,7 +30,7 @@ class Program : public QWidget
         resultLabel->setText(QString("Result: %1").arg(result));
     }
     public:
-        Program(QWidget *parent = nullptr) noexcept : QWidget(std::move(parent))
+        Program(QWidget *parent = nullptr) noexcept : QWidget(parent)
         {
             layout->addWidget(title);
             layout->addWidget(formulaC);
