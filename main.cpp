@@ -4,7 +4,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLineEdit>
-
+#include <QMessageBox>
 /*
     Formulas:
     F = (C * 9/5) + 32
@@ -15,23 +15,26 @@ class Program : public QWidget
 {
     Q_OBJECT
     private:
-        float result{0.0};
+    // Initialize Widgets
+        double result{};
         QVBoxLayout *layout{new QVBoxLayout(this)};
         QLineEdit *line{new QLineEdit(this)};
         QPushButton *fahrenheitToCelsiusBtn{new QPushButton("Fahrenheit to Celsius", this)};
         QPushButton *celsiusToFahrenHeitBtn{new QPushButton("Celsius To Fahrenheit", this)};
-        QLabel *resultLabel{new QLabel("Result: 0", this)};
+        QLabel *resultLabel{new QLabel("Result will appear here...", this)};
         QLabel *formulaC{new QLabel("C = (F - 32) * 5/9", this)};
         QLabel *formulaF{new QLabel("F = (C * 9/5) + 32", this)};
         QLabel *title{new QLabel("=== Celsius/Fahrenheit Converter ===", this)};
 
-    void setLabelText() noexcept
+    // Initialize Functions
+    void setLabelText(const QString &str)
     {
-        resultLabel->setText(QString("Result: %1").arg(result));
+        resultLabel->setText(QString(str));
     }
     public:
-        Program(QWidget *parent = nullptr) noexcept : QWidget(parent)
+        Program(QWidget *parent = nullptr) noexcept : QWidget(std::move(parent)) // Note for John: Clean implementation, but why is std::move here? -- Nico
         {
+            // Add Widgets to layout
             layout->addWidget(title);
             layout->addWidget(formulaC);
             layout->addWidget(formulaF);
@@ -40,22 +43,37 @@ class Program : public QWidget
             layout->addWidget(fahrenheitToCelsiusBtn);
             layout->addWidget(celsiusToFahrenHeitBtn);
 
+            // Lambdas to deploy logic
             connect(fahrenheitToCelsiusBtn, &QPushButton::clicked, this, [this] {
-                float fahrenheit{line->text().toFloat()};
-                result = (fahrenheit - 32) * 5/9;
-                setLabelText();
+                bool ok;
+                double fahrenheit{line->text().toDouble(&ok)};
+
+                if (!ok) {
+                    QMessageBox::warning(this, "Error", "Please enter a valid number.");
+                    return;
+                }
+
+                double result = (fahrenheit - 32.0) * 5.0/9.0;
+                setLabelText(QString("Result: %1 °F").arg(result, 0, 'f', 2));
             });
 
             connect(celsiusToFahrenHeitBtn, &QPushButton::clicked, this, [this] {
-                float celsius{line->text().toFloat()};
-                result = (celsius * 9/5) + 32;
-                setLabelText();
+                bool ok;
+                double celsius{line->text().toDouble(&ok)};
+
+                if (!ok) {
+                    QMessageBox::warning(this, "Error", "Please enter a valid number.");
+                    return;
+                }
+
+                double result = (celsius * 9.0/5.0) + 32.0;
+                setLabelText(QString("Result: %1 °C").arg(result, 0, 'c', 2));
             });
         }
     
 };
 
-
+// Entry point
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -70,4 +88,4 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 
-#include "main.moc"
+#include "main.moc" // <- Including MOC so that Qt stops bitching
