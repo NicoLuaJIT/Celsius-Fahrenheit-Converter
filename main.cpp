@@ -43,6 +43,8 @@ class Program : public QWidget
             layout->addWidget(fahrenheitToCelsiusBtn);
             layout->addWidget(celsiusToFahrenHeitBtn);
 
+            line->setPlaceholderText("Enter your value here...");
+
             // Lambdas to deploy logic
             connect(fahrenheitToCelsiusBtn, &QPushButton::clicked, this, [this] {
                 bool ok;
@@ -71,6 +73,20 @@ class Program : public QWidget
             });
         }
     
+        // Styling
+        void style(QApplication &app)
+        {
+            title->setStyleSheet("padding: 10px; color: rgb(210,220,230); border: 1.5px solid rgb(170,180,190); border-radius: 2.5px;");
+
+            formulaC->setStyleSheet("color: rgb(210,220,230);");
+            formulaF->setStyleSheet("color: rgb(210,220,230);");
+            resultLabel->setStyleSheet("color: rgb(210,220,230);");
+
+            line->setStyleSheet("color: rgb(210,220,230); background-color: rgb(95,96,97);");
+            fahrenheitToCelsiusBtn->setStyleSheet("color: rgb(210,220,230); background-color: rgb(95,96,96);");
+            celsiusToFahrenHeitBtn->setStyleSheet("color: rgb(210,220,230); background-color: rgb(95,96,97);");
+            app.setStyleSheet("Program { background-color: rgb(45,46,47); }");
+        }
 };
 
 // Entry point
@@ -83,6 +99,7 @@ int main(int argc, char *argv[])
 
     Program program;
     program.show();
+    program.style(app);
     program.resize(width, height);
 
     return app.exec();
