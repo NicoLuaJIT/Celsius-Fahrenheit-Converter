@@ -34,7 +34,8 @@ class Program : public QWidget
     public:
         Program(QWidget *parent = nullptr) noexcept : QWidget(parent)
         {
-            // Add Widgets to layout
+            setLayout(layout);
+            
             layout->addWidget(title);
             layout->addWidget(formulaC);
             layout->addWidget(formulaF);
